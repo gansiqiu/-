@@ -1,0 +1,21 @@
+body{
+	background: #EEEEEE;
+}
+html,body {
+	height: 100%;
+}
+/*导航栏*/
+body nav{
+	width: 99%;height: 100px;margin: 5px auto;background: #393939;
+}
+
+#Content #leftContent{
+	background: #FDFDFD;height: 835px;border: solid #BABABA 1px;
+}
+#Content #leftContent #dropdown1 li a{
+	background: #FDFDFD;
+}
+
+#Content #leftContent a{
+	width: 100%;margin: 5px auto;background: #FDD616;
+}

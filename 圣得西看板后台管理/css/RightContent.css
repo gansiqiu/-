@@ -1,0 +1,71 @@
+/*右边大的内容div*/
+#Content #rightContent {	
+	background: #FDFDFD;
+	height: 835px;
+	border: solid #BABABA 1px;
+}
+/*灵感素材标题*/
+#Content #rightContent #title {
+	margin-left: 40px;
+	margin-top: 30px;
+}
+/*新建素材按钮*/
+#Content #rightContent #NewBtn:hover{
+	cursor: pointer;
+}
+#Content #rightContent #NewBtn {
+	width: 150px;
+	height: 40px;
+	line-height: 40px;
+	font-size: 20px;
+	background: #FDD616;
+	display: inline-block;
+	margin: 0 auto;
+	margin-left: 40px;
+	text-align: center;
+}
+/*搜索框*/
+#Content #rightContent #searchBar {
+	border: solid #E0E0E0 2px;
+	width: 230px;
+	height: 38px;
+	line-height: 38px;
+	margin-left: 45%;
+}
+/*条件搜索按钮*/
+#Content #rightContent #showButton {
+	width: 90px;height: 30px;line-height: 30px; border:solid #DEDEDE 1px;text-align: center;margin-left: 70%;margin-bottom: 10px;
+}
+
+/*搜素按钮*/
+#searchButton:hover{
+	cursor:pointer
+}
+#Content #rightContent #searchButton {
+	width: 80px;
+	height: 40px;
+	line-height: 40px;
+	font-size: 16px;
+	background: #FDD616;
+	display: inline-block;
+	text-align: center;
+}
+
+/*显示信息的table设置*/
+#Content #rightContent table{
+	width: 100%;
+	border-bottom: solid ##BABABA 1px;
+}
+/*table头部设置*/
+#Content #rightContent table thead #table_thead th{
+	background: #EEEEEE;
+	text-align: center;
+	width: 11%;
+}
+#Content #rightContent table thead #table_thead #table_thead_img {
+	width: 22%;
+}
+/*table表格内容设置*/
+#Content #rightContent table #table_tr td{
+	text-align: center;
+}

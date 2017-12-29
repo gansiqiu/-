@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>materialize界面2</title>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<script type="text/javascript" src="js/materialize.js"></script>
+		<script type="text/javascript">
+			var row = "";
+			var offset = "";
+			var limit = 6;
+			var pageNum = 1;
+			var dataPage = "";
+			var fenye = 1;
+			var fenyeTotal= "";
+			var dataArray = "";
+			var flag = "";
+			//table清空
+			function clearTable(){
+				$("table").remove();
+			}
+			//创建table
+			function creatTable(){
+				//在分页控件之前插入table标签
+				$("<table id='content_table' class='centered highlight bordered'></table>").insertBefore("#Pagination");
+				$("#content_table").append("<tr id='content_menu'></tr>");
+				$("#content_menu").append("<th class='center'><a href='#'>产品图</a></th>");
+				$("#content_menu").append("<th class='center'><a href='#'>名称</a></th>");
+				$("#content_menu").append("<th class='center'><a href='#'>尺寸</a></th>");
+				$("#content_menu").append("<th class='center'><a href='#'>颜色</a></th>");
+				$("#content_menu").append("<th class='center'><a href='#'>更多</a></th>");
+			}
+			//清空分页控件
+			function clearPageControl(){
+				$("#pageDiv").remove();
+			}
+
+			//重建大分页控件
+			function creatBigPageControl(){
+				clearPageControl();
+				$("<span id='pageDiv'></span>").insertBefore("#rightPage");
+				//创建多少分页控件
+				if (dataPage % 5 == 0) {
+					for (var j = 5*(fenye-1)+1;j <= 5*fenye ;j++ ) {
+						//初始化让分页1为选中状态   pageDiv
+						if (j == pageNum) {
+							$("#pageDiv").append("<li id='#page_' class='active'><a id='pageA' class='pageA' href='#!'>"+j+"</a></li>");
+						}else{
+							$("#pageDiv").append("<li id='#page' class='waves-effect'><a id='pageA' class='pageA' href='#!'>"+j+"</a></li>");
+						}
+					}
+				} else{
+					for (var j = 5*(fenye-1)+1;j <= 5*fenye ;j++ ) {
+						if (fenye == fenyeTotal &&  j >= 5*(fenye-1)+1 + parseInt(dataPage%5) ) {
+						} else{
+							if (j == pageNum) {
+								$("#pageDiv").append("<li id='#page_' class='active'><a id='pageA' class='pageA' href='#!'>"+j+"</a></li>");
+							}else{
+								$("#pageDiv").append("<li id='#page' class='waves-effect'><a id='pageA' class='pageA' href='#!'>"+j+"</a></li>");
+							}
+						}
+					//初始化让分页1为选中状态   pageDiv
+					}
+				}
+				clickButton();
+			}
+			
+			//分页控件左右按钮事件处理
+			function leftAndRightBigPage(){
+//				//左
+				$("#lefeBigPage").click(function(){	
+					flag = 0;
+					if (fenye == 1) {
+						//到达了第一页
+						$("#lefeBigPage").attr("class", "disabled");
+						$("#rightBigPage").attr("class", "waves-effect");
+					} else{
+						$("#lefeBigPage").attr("class", "waves-effect");
+						$("#rightBigPage").attr("class", "waves-effect");
+						//如果没有到达第一页
+						clearTable();
+						clearPageControl();
+						getDataInit((fenye-1)*30 - 30,6);
+						if (pageNum % 5 == 1) {
+							pageNum-=5;
+						} else{
+								pageNum = (fenye-2)*5+1; //变为下一页开头6 11 16
+						}
+						fenye--;
+					}
+				});			
+				//右
+				$("#rightBigPage").click(function(){
+					if (fenye == fenyeTotal) {
+						//到达了最后一页
+						$("#lefeBigPage").attr("class", "waves-effect");
+						$("#rightBigPage").attr("class", "disabled");
+					} else{
+						$("#lefeBigPage").attr("class", "waves-effect");
+						$("#rightBigPage").attr("class", "waves-effect");
+						clearTable();			//清table
+						clearPageControl();		//清分页控件
+						getDataInit((fenye-1)*30 + 30,6);
+						if (pageNum % 5 == 1) {
+							pageNum+=5;
+						} else{
+							if (pageNum % 5 == 0) {//当到5的倍数时，点击前进一页pageNum只加1
+								pageNum++;
+							} else{
+								pageNum += 6 -parseInt(pageNum%5);//变为下一页开头6 11 16
+							}
+						}
+						fenye++;
+					}
+				});
+				
+			}
+			function leftAndRightPage(){
+				//左
+				$("#lefePage").click(function(){
+					if (pageNum == 1) {
+						//到达了第一页
+						$("#lefePage").attr("class", "disabled");
+						$("#rightPage").attr("class", "waves-effect");
+					} else{
+						$("#lefePage").attr("class", "waves-effect");
+						$("#rightPage").attr("class", "waves-effect");
+						//如果没有到达第一页
+						clearTable();
+						clearPageControl();
+						getDataInit((pageNum-1)*6 - 6,6);
+						if (pageNum % 5 != 1) {
+							pageNum--;
+						} else{
+							pageNum--;//变为下一页开头6 11 16
+							fenye--;
+						}
+					}
+				});			
+				//右
+				$("#rightPage").click(function(){
+					if (pageNum == dataPage) {
+						//到达了最后一页
+						$("#lefePage").attr("class", "waves-effect");
+						$("#rightPage").attr("class", "disabled");
+					} else{
+						$("#lefePage").attr("class", "waves-effect");
+						$("#rightPage").attr("class", "waves-effect");
+						clearTable();
+						clearPageControl();
+						getDataInit((pageNum-1)*6 + 6,6);
+						if (pageNum % 5 != 0) {
+							pageNum++;
+						} else{
+							pageNum++;//变为下一页开头6 11 16
+							fenye++;
+						}
+						
+					}
+				});
+				
+			}
+			
+			//检测按钮，切换至相对应界面
+			function clickButton(){
+				$(".pageA").bind("click", function(){
+					var txt = parseInt($(this).html());
+  					clearTable();
+					clearPageControl();
+  					getDataInit((txt-2)*6 + 6,6);
+					if (pageNum == dataPage -1) {
+						//到达了最后一页
+					}else{
+  						if (pageNum == 1) {
+						//到达了第一页
+						$("#lefePage").attr("class", "disabled");
+						$("#rightPage").attr("class", "waves-effect");
+					} else{
+  							$("#lefePage").attr("class", "waves-effect");
+							$("#rightPage").attr("class", "waves-effect");
+  						}
+  					}
+					pageNum = txt;
+					$("#page").parent().attr("class", "active");
+				});
+			}
+//			//点击了按钮之后跳转到相应页面table
+			function clickGo(){
+				$("#buttonOfGo").bind("click",function(){
+					var txt = parseInt($("#textPageGo").val());
+					clearTable();
+					clearPageControl();
+					getDataInit((txt-2)*6 + 6,6);
+					pageNum = txt;
+					if (txt%5 == 0) {
+						fenye = parseInt(txt/5);
+					} else{
+						fenye = parseInt(txt/5)+1;
+					}
+					$("#page").parent().attr("class", "active");
+				});
+			}
+
+			//初始化数据请求
+			function getDataInit(offset, limit) {
+				//ajax请求数据
+				$.ajax({
+					type: "get",
+					url: "http://127.0.0.1:8081/",
+					data: "offset=" + offset + "&limit=" + limit,
+					async: true,
+					dataType: "json",
+					success: function(data) {
+						dataArray = null;
+						dataArray = data.jsonData;
+						dataPage = data.totalPage;
+						$("#totalPageNumber").text("共"+dataPage+"页");
+						if (dataPage % 5 == 0) {
+							fenyeTotal = parseInt(dataPage / 5);
+						} else{
+							fenyeTotal = parseInt(dataPage / 5) + 1;
+						}
+						if (dataArray.length % 6 == 0) {
+							row = 6;
+						} else{
+							row = dataArray.length;
+						}
+						creatTable();	
+						creatBigPageControl();
+						for(var i = 0; i < row; i++) {
+							$("#content_table").append("<tr id='content_tr_"+i+"'></tr>");
+							$("#content_tr_"+ i).append("<td id='contentTd_pro_"+ i +"0'><a id='content_pro_"+i+"0' href='#'><img id='content_img_"+i+"'/></a></td>");
+								$("#content_img_" + i).attr({"width": "144px","height": "88px","src" : dataArray[i].img});
+							$("#content_tr_"+ i).append("<td id='contentTd_name_"+ i +"0'><a id='content_name_"+i+"0' href='#'>"+dataArray[i].name+"</a></td>");
+							$("#content_tr_"+ i).append("<td id='contentTd_size_"+ i +"0'><a id='content_size_"+i+"0' href='#'>"+dataArray[i].size+"</a></td>");
+							$("#content_tr_"+ i).append("<td id='contentTd_color_"+ i +"0'><a id='content_color_"+i+"0' href='#'>"+dataArray[i].color+"</a></td>");
+							$("#content_tr_"+ i).append("<td id='contentTd_pro_"+ i +"4'><pre><a href='#'>预览</a> <a href='#'>打印</a> <a href='#'>删除</a></pre> </td>");	
+						}						
+					}
+				});
+			}
+			$(document).ready(function() {
+				
+				getDataInit(0, 6);		
+				leftAndRightBigPage();
+				leftAndRightPage();
+				clickGo();
+			});
+		</script>
+		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+		<link rel="stylesheet" type="text/css" href="css/materialize.css" />
+		<style type="text/css">
+			html,body{
+				height: 100%;
+			}
+		</style>
+	</head>
+
+	<body class="grey lighten-4">
+		<div class="row">
+			<nav class="col s12">
+				<div class="nav-wrapper">
+					<a href="#" class="brand-logo">Logo</a>
+					<ul id="nav-mobile" class="right hide-on-med-and-down">
+						<li>
+							<a href="#">Sass</a>
+						</li>
+						<li>
+							<a href="#">组件</a>
+						</li>
+						<li>
+							<a href="#">JavaScript</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+			<div class="col s2 light-blue lighten-5" style="height: 800px">
+				<a class='dropdown-button btn' data-beloworigin=true href='materialize界面3.html' data-activates='dropdown1' style="width: 150px;">分类</a>
+				<ul id='dropdown1' class='dropdown-content'>
+					<li>
+						<a href="#">电视剧|综艺</a>
+					</li>
+					<li>
+						<a href="#">游戏|小游戏</a>
+					</li>
+					<li>
+						<a href="#">电影|直播</a>
+					</li>
+					<li>
+						<a href="#">动画|漫画</a>
+					</li>
+					<li>
+						<a href="#">新闻|军事</a>
+					</li>
+					<li>
+						<a href="#">旅游|音乐</a>
+					</li>
+				</ul>
+			</div>
+			<div id="content" class="col s10 bordered light-blue lighten-5" style="height: 800px;">
+				<table id="content_table" class="centered highlight bordered"></table><br />
+				
+					
+				<!--分页控件-->
+				<div id="Pagination" class="row valign-wrapper">
+					<ul class="pagination" style="margin: 0 auto;">
+						<li id="lefeBigPage" class="disabled">
+							<a href="#!" style="font-size: 15px;">后退一页</a>
+						</li>
+						<li id="lefePage" class="disabled">
+							<a href="#!"><i class="material-icons">chevron_left</i></a>
+						</li>
+						<span id="pageDiv">
+						</span>
+						<li id="rightPage" class="waves-effect">
+							<a href="#!"><i class="material-icons">chevron_right</i></a>
+						</li>
+						<li id="rightBigPage" class="waves-effect" >
+							<a href="#!" style="font-size: 15px;">前进一页</a>
+						</li>
+						<li id="totalPageNumber" style="border: 1px;"></li>
+						<li style="border: 1px;">前往
+							<input type="number" name="textPageGo" id="textPageGo" value="" style="width:30px; height:20px;line-height: 20px;"/>页
+						</li>
+						<li id="buttonOfGo"> 确定 </li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+	</body>
+
+</html>

@@ -1,0 +1,64 @@
+/*
+ * 新建素材的div界面
+ * */
+#rightContent_2 {
+	background: #FEFEFE;
+	height: 835px;
+	font-size: 17px;
+}
+/*新建素材的标题*/
+#Content #rightContent_2 #rightContent2_title {
+	width: 150px;
+	height: 40px;
+	line-height: 40px;
+	font-size: 20px;
+	text-align: center;
+}
+#rightContent_2 #rightContent2_number,#rightContent_2 #rightContent2_type,#rightContent_2 #rightContent2_SimpleComplex,#rightContent_2 #rightContent2_HaleFull,#rightContent_2 #rightContent2_CoolWarm{
+	margin-top: 30px;
+}
+#rightContent_2 #rightContent2_number #rightContent2_number_title,
+#rightContent_2 #rightContent2_type #rightContent2_type_title {
+	width: 180px;
+	letter-spacing: 40px;
+	padding-left: 37px;
+	text-align: center;
+	display: inline-block;
+}
+
+#rightContent_2 #rightContent2_number #rightContent2_number_input,
+#rightContent_2 #rightContent2_type #rightContent2_type_input {
+	width: 350px;
+	height: 35px;
+	border: solid #DADADA 1px;
+	background: #EDEDED;
+	display: inline-block;
+}
+
+#rightContent_2 #rightContent2_SimpleComplex #rightContent2_SimpleComplex_title,
+#rightContent_2 #rightContent2_HaleFull #rightContent2_HaleFull_title,
+#rightContent_2 #rightContent2_CoolWarm #rightContent2_CoolWarm_title {
+	display: inline-block;
+	width: 180px;
+	text-align: center;
+}
+
+#rightContent_2 #rightContent2_SimpleComplex #rightContent2_SimpleComplex_input,
+#rightContent_2 #rightContent2_HaleFull #rightContent2_HaleFull_input,
+#rightContent_2 #rightContent2_CoolWarm #rightContent2_CoolWarm_input {
+	width: 315px;
+	height: 35px;
+	border: solid #DADADA 1px;
+	background: #EDEDED;
+	display: inline-block;
+}
+/*input的三个小图标*/
+#rightContent_2 #rightContent2_SimpleComplex p{
+	width: 35px;height: 35px;display: inline-block; position: absolute;left: 513px;top: 248px;border: solid #E2E2E2 1px;
+	background: url(../img/img_3.JPG)no-repeat center center;	
+}#rightContent_2 #rightContent2_HaleFull p{
+	width: 35px;height: 35px;background: url(../img/img_3.JPG)no-repeat center center;display: inline-block; position: absolute;left: 513px;top: 335px;border: solid #E2E2E2 1px;
+}
+#rightContent_2 #rightContent2_CoolWarm p{
+	width: 35px;height: 35px;background: url(../img/img_3.JPG)no-repeat center center;display: inline-block; position: absolute;left: 513px;top: 422px;border: solid #E2E2E2 1px;
+}

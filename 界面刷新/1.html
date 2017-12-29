@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+		<meta name="ProgId" content="FrontPage.Editor.Document">
+		<title>New Page 1</title>
+		<style type="text/css">
+			body {
+				font: 9pt "宋体";
+				margintop: 0px;
+				color: #ffffff;
+				background: #000000
+			}
+			
+			a. {
+				font: 9pt "宋体";
+				cursor: hand;
+				font-size: 9pt;
+				color: #ffffff;
+				text-decoration: none
+			}
+			
+			a:active {
+				font: 9pt "宋体";
+				cursor: hand;
+				color: #FF0033
+			}
+			
+			a.cc:hover {
+				font: 9pt "宋体";
+				cursor: hand;
+				color: #FF0033
+			}
+			
+			.box {
+				font: 9pt "宋体";
+				position: absolute;
+				background: #000000
+			}
+		</style>
+	</head>
+
+	<body>
+		<table id="itemopen" class="box" style="display:none">
+			<tr>
+				<td>弹出菜单</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="../../../index.html" class="cc">本站首页</a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="../../navigation/newscript.htm" class="cc">最新更新</a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="../../navigation/applet/appletindex.htm" class="cc">梦想软件</a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="../../../jsschool/index.htm" class="cc">桌面壁纸</a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="popmenu.htm" class="cc">更多连接</a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="popmenu.htm" class="cc">更多连接</a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="popmenu.htm" class="cc">更多连接</a>
+				</td>
+			</tr>
+		</table>
+		<!-- End of Popup Menu -->
+		<script language="JavaScript">
+			document.onclick = popUp
+
+			function popUp() {
+				newX = window.event.x + document.body.scrollLeft
+				newY = window.event.y + document.body.scrollTop
+				menu = document.all.itemopen
+				if(menu.style.display == "") {
+					menu.style.display = "none"
+				} else {
+					menu.style.display = ""
+				}
+				menu.style.pixelLeft = newX - 50
+				menu.style.pixelTop = newY - 50
+			}
+		</script>
+	</body>
+
+</html>

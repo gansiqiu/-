@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>界面刷新2017.10.10</title>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/basic.css" />
+		<script type="text/javascript">
+			var list = new Array;
+			var pageNum = 0;
+
+			//设置传给服务器端的参数 offset：偏移量   limit：数据长度
+			var offset = "";
+			var limit = "";
+			var jsonData = new Array;
+			function getData(offset, limit) {
+				//ajax请求数据
+				$.ajax({
+					type: "get",
+					url: "http://127.0.0.1:8081/index.html",
+					data: "offset=" + offset + "&limit=" + limit,
+					async: true,
+					dataType:"json",
+					success: function(data) {
+						
+						console.log(data.length);
+						for (var i = 0;i<data.length;i++) {
+							jsonData[i] = data[i];
+							console.log(jsonData[i].time);
+						}
+						
+						var row = "";
+						if(data.length % 4 == 0) {
+								row =parseInt(data.length / 4);
+								$("#content").append("<div class='contentDiv' id='contentDiv_" + pageNum + "'></div>");				
+							for(var i = 0; i < row; i++) {
+								$("#contentDiv_" + pageNum).append("<div class='loadDiv' id='row_" + i + pageNum + "'><ul class='loadUl' id='ul_" + i + pageNum + "'></ul></div>");
+									for(var j = 0; j < 4; j++) {
+		
+										$("#ul_" + i + pageNum).append("<li class='loadLi' id='li_" + i + j + pageNum + "'></li>");
+										$("#li_" + i + j + pageNum).append("<div  id='div_" + i + j + pageNum + "'></div>");
+										$("#div_" + i + j + pageNum).append("<img class='loadImg' id='img_" + i + j + pageNum + "' />");
+										$("#div_" + i + j + pageNum).append("<p class='loadP'>"+data[4 * i + j].time+"</p>");
+										$(".loadImg").attr("src", "img/" + data[4 * i + j].img);
+									}
+									
+							}
+							pageNum++;
+							$("img").click(function() {
+								$("#hid").show("fast");
+								$("#bg_2").fadeToggle("slow");
+								$("#hid").css("height", window.document.body.clientHeight);
+							});
+							$("#bg_2").click(function() {
+								$("#bg_2").hide();
+								$("#hid").hide();
+							});
+						} else {
+							row = parseInt(data.length / 4 + 1);
+							
+							$("#content").append("<div class='contentDiv' id='contentDiv_" + pageNum + "'></div>");				
+						for(var i = 0; i < row; i++) {
+							$("#contentDiv_" + pageNum).append("<div class='loadDiv' id='row_" + i + pageNum + "'><ul class='loadUl' id='ul_" + i + pageNum + "'></ul></div>");
+							var j = "";
+							if (i == row - 1) {
+								for(var j = 0; j < data.length % 4; j++) {
+									console.log(i ,row);
+									$("#ul_" + i + pageNum).append("<li class='loadLi' id='li_" + i + j + pageNum + "'></li>");
+									$("#li_" + i + j + pageNum).append("<div  id='div_" + i + j + pageNum + "'></div>");
+									$("#div_" + i + j + pageNum).append("<img class='loadImg' id='img_" + i + j + pageNum + "' />");
+									$("#div_" + i + j + pageNum).append("<p class='loadP'>"+data[4 * i + j].time+"</p>");
+									$(".loadImg").attr("src", "img/" + data[4 * i + j].img);
+								}
+							} else{
+								for(var j = 0; j < 4; j++) {
+									$("#ul_" + i + pageNum).append("<li class='loadLi' id='li_" + i + j + pageNum + "'></li>");
+									$("#li_" + i + j + pageNum).append("<div  id='div_" + i + j + pageNum + "'></div>");
+									$("#div_" + i + j + pageNum).append("<img class='loadImg' id='img_" + i + j + pageNum + "' />");
+									$("#div_" + i + j + pageNum).append("<p class='loadP'>"+data[4 * i + j].time+"</p>");
+									$(".loadImg").attr("src", "img/" + data[4 * i + j].img);
+								}
+							}
+								
+						}
+						pageNum++;
+						$("img").click(function() {
+							$("#hid").show("fast");
+							$("#bg_2").fadeToggle("slow");
+							$("#hid").css("height", window.document.body.clientHeight);
+						});
+						$("#bg_2").click(function() {
+							$("#bg_2").hide();
+							$("#hid").hide();
+						});
+						}
+						
+					}
+				});
+			}
+
+			$(document).ready(function() {
+				getData(0, 20);
+
+				//当导航条到达最低端时
+				$(window).scroll(function() {
+					if($(window).scrollTop() == $(document).height() - $(window).height()) {
+//						getData((pageNum-1)*limit + limit,limit);
+						getData((pageNum-1)*20 + 20,20);//offset 20 40   
+						alert("botton!!!");
+					}
+				});
+			});
+		</script>
+		<style type="text/css">
+			.contentDiv {
+				z-index: 1;
+				margin: 0 auto;
+				width: 100%;
+			}
+			
+			.loadUl {
+				width: 100%;
+			}
+			/*在同一行显示*/
+			
+			.loadUl .loadLi {
+				width: 24%;
+				float: left;
+				margin: 0 auto;
+				list-style-type: none;
+			}
+			/*等比例图片缩放*/
+			
+			img {
+				width: auto;
+				height: auto;
+				max-width: 100%;
+				max-height: 100%;
+			}
+			
+			.loadUl .loadLi .loadP {
+				margin: 0 auto;
+				font-size: 12px;
+				height: 30px;
+				line-height: 30px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="bg_2">
+			<img id="xPng" src="img/x.png" />
+			<h3>习近平:再接再厉 扎实工作 坚决打赢脱贫攻坚战</h3>
+			<p>新华社北京10月9日电　在第四个国家扶贫日即将到来之际，中共中央总书记、国家主席、中央军委主席习近平对脱贫攻坚工作作出重要指示强调，社会主义是干出来的。脱贫攻坚是硬仗中的硬仗，必须付出百倍努力。全党全社会要再接再厉、扎实工作，坚决打赢脱贫攻坚战，在全面建成小康社会的征程上不断创造新的业绩。</p>
+		</div>
+		<div id="hid"></div>
+		<div id="content">
+			<div id="bg_1">
+				<ul>
+					<li>
+						<div id="div_1">
+						</div>
+
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div id="myDiv"> </div>
+	</body>
+</html>
+
+
+
+
+
+
+

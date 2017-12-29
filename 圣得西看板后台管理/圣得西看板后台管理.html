@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>圣得西看板后台管理</title>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<script type="text/javascript" src="js/materialize.js"></script>
+		<script type="text/javascript">
+			
+			//清除table中的tbody
+			
+			$(document).ready(function() {
+				
+				let conditionData = new Object;
+				conditionData.type = [];
+				conditionData.simplecomplex = [];
+				conditionData.halefull = [];
+				conditionData.coolwarm = [];
+				
+				getInitData(conditionData);
+			})
+			
+		</script>
+
+		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+		<link rel="stylesheet" type="text/css" href="css/materialize.css" />
+		<link rel="stylesheet" type="text/css" href="css/basic.css"/>
+		<link rel="stylesheet" type="text/css" href="css/RightContent.css" />
+		<link rel="stylesheet" type="text/css" href="css/hiddenDiv.css"/>
+		<link rel="stylesheet" type="text/css" href="css/newMaterial.css"/>
+		<link rel="stylesheet" type="text/css" href="css/editMaterial.css"/>
+
+	</head>
+
+	<body>	
+
+		<!--导航栏-->
+		<nav class="col s12">
+			<div class="nav-wrapper">
+				<a href="#" class="brand-logo">Logo</a>
+				<ul id="nav-mobile" class="right hide-on-med-and-down">
+					<li>
+						<a href="#">管理员</a>
+					</li>
+					<li>
+						<a href="#">退出</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+		<!--下方左右栏-->
+		<div id="Content" class="row">
+			<!--左边菜单栏-->
+			<div id="leftContent" class="col s2 push-s1">
+				<a class='dropdown-button btn' data-beloworigin=true constrainwidth=false href='#' data-activates='dropdown1'>功能</a>
+				<ul id='dropdown1' class='dropdown-content' style="margin: 10px auto;">
+					<li>
+						<a id="material_manage" href="#!">灵感素材管理</a>
+					</li>
+					<li>
+						<a id="collocation_manage" href="#!">搭配管理</a>
+					</li>
+					<li>
+						<a id="designer_manage" href="#!">设计师管理</a>
+					</li>
+				</ul>
+			</div>
+
+			<!--右边内容-->
+			<div id="rightContent" class="col s8 push-s1">
+				<h5 id="title">灵感素材管理</h4>
+				<p id="NewBtn"><b style="font-size:25px;">+</b>	&nbsp;新建素材</p>
+				<input id="searchBar" type="text" placeholder="编号/类别"/>
+				<p id="searchButton">搜索</p>
+				<div id="showButton" hidden="hidden">
+					条件搜索
+				</div>
+				
+				<!--第二部分：隐藏和显示切换的div-->
+				<div id="hiddenDiv">
+					<!--种类-->
+					<div  id="Type">
+						<div class="col s2" id="Type_title"><p>种类</p></div>
+						<div class="col s10" id="TypeDiv">
+							<p class="col s2" id="Type_0">艺术品</p>
+							<p class="col s2" id="Type_1" >建筑</p>
+							<p class="col s2" id="Type_2" >动物</p>
+							<p class="col s2" id="Type_3" >植物</p>
+							<p class="col s2" id="Type_4" >风景</p>
+						</div>
+					</div>
+					<!--简单-复杂-->
+					<div id="Simple-Complex">
+						<div  id="Simple-Complex_title"><p>简单-复杂</p></div>
+						<div id="Simple-ComplexDiv">
+							<p  id="Simple-Complex_0">-3</p>
+							<p  id="Simple-Complex_1" >-2.5</p>
+							<p  id="Simple-Complex_2" >-2</p>
+							<p  id="Simple-Complex_3" >-1.5</p>
+							<p  id="Simple-Complex_4" >-1</p>
+							<p  id="Simple-Complex_5" >-0.5</p>
+							<p  id="Simple-Complex_6" >0</p>
+							<p  id="Simple-Complex_7" >0.5</p>
+							<p  id="Simple-Complex_8" >1</p>
+							<p  id="Simple-Complex_9" >1.5</p>
+							<p  id="Simple-Complex_10" >2</p>
+							<p  id="Simple-Complex_11" >2.5</p>
+							<p  id="Simple-Complex_12" >3</p>
+						</div>
+					</div>
+					<!--硬朗-圆润-->
+					<div id="Hale-Full">
+						<div  id="Hale-Full_title"><p>硬朗-圆润</p></div>
+						<div id="Hale-FullDiv">
+							<p  id="Hale-Full_0">-3</p>
+							<p  id="Hale-Full_1" >-2.5</p>
+							<p  id="Hale-Full_2" >-2</p>
+							<p  id="Hale-Full_3" >-1.5</p>
+							<p  id="Hale-Full_4" >-1</p>
+							<p  id="Hale-Full_5" >-0.5</p>
+							<p  id="Hale-Full_6" >0</p>
+							<p  id="Hale-Full_7" >0.5</p>
+							<p  id="Hale-Full_8" >1</p>
+							<p  id="Hale-Full_9" >1.5</p>
+							<p  id="Hale-Full_10" >2</p>
+							<p  id="Hale-Full_11" >2.5</p>
+							<p  id="Hale-Full_12" >3</p>
+						</div>
+					</div>
+					<!--冷酷-温暖-->
+					<div id="Cool-Warm">
+						<div  id="Cool-Warm_title"><p>冷酷-温暖</p></div>
+						<div id="Cool-WarmDiv">
+							<p  id="Cool-Warm_0">-3</p>
+							<p  id="Cool-Warm_1" >-2.5</p>
+							<p  id="Cool-Warm_2" >-2</p>
+							<p  id="Cool-Warm_3" >-1.5</p>
+							<p  id="Cool-Warm_4" >-1</p>
+							<p  id="Cool-Warm_5" >-0.5</p>
+							<p  id="Cool-Warm_6" >0</p>
+							<p  id="Cool-Warm_7" >0.5</p>
+							<p  id="Cool-Warm_8" >1</p>
+							<p  id="Cool-Warm_9" >1.5</p>
+							<p  id="Cool-Warm_10" >2</p>
+							<p  id="Cool-Warm_11" >2.5</p>
+							<p  id="Cool-Warm_12" >3</p>
+						</div>
+					</div>
+					<br />
+					<p style="background: #DEDEDE;width: 95%;height: 2px;margin: 0 auto;"></p>
+					<div id="hiddenButton" style="width: 90px;height: 30px;line-height: 30px; border:solid #DEDEDE 1px;margin: 0 auto;text-align: center;">
+						收起选项
+					</div>
+				</div>
+					
+					
+				<!--table显示-->
+				 <table id="ContentTable" class="bordered">
+				        <thead id="thead">
+				          <tr id="table_thead">
+				          	<th id="table_thead_img" data-field="table_thead_img">图片</th>
+				          	<th data-field="table_thead_type">类别</th>
+				          	<th data-field="table_thead_number">编号</th>
+				          	<th data-field="table_thead_simple-complex">简单-复杂</th>
+				          	<th data-field="table_thead_hale-full">硬朗-圆润</th>
+				          	<th data-field="table_thead_cool-warm">冷酷-温暖</th>
+				          	<th data-field="table_thead_buildData">建档日期</th>
+				          	<th data-field="table_thead_operation">操作</th>
+				          </tr>
+				        </thead>
+				       
+				        </tbody>
+				    </table>
+				
+				
+				
+				<!--分页控件-->
+				<ul  class="pagination"  style="margin-left:50% ;">
+				    <li id="leftButton" class="waves-effect"><a href="#!"><i class="material-icons disabled">chevron_left</i></a></li>
+				    <!--建立一个空标记，用于刷新分页控件-->
+				    <span id="pageNullDiv" class="waves-effect">
+				    	<li class="active"><a href="#!">1</a></li>
+					    <li class="waves-effect"><a href="#!">2</a></li>
+					    <li class="waves-effect"><a href="#!">3</a></li>
+					    <li class="waves-effect"><p style="width: 30px;height: 30px;line-height: 30px; text-align: center;margin: 0 auto;">···</p></li>
+					    <li class="waves-effect"><a href="#!">128</a></li>
+				    </span>
+				 
+				    <li id="rightButton" class="waves-effect"><a href="#!"><i class="material-icons disabled">chevron_right</i></a></li>
+				    <li style="border: 1px;">跳至
+							<input type="number" name="textPageGo" id="textPageGo" value="" style="width:50px; height:30px;line-height: 30px;"/>页
+					</li>
+					<li id="buttonPageGo" style="height: 30px;line-height: 30px;margin-left: 10px;border: 1px;">跳转</li>
+				</ul>
+
+			</div>
+		
+			<div id="rightContent_2" hidden="hidden"  class="col s8 push-s1">
+				<p id="rightContent2_title">新建素材</p>
+				<div id="rightContent2_number">
+					<span id="rightContent2_number_title" style="">编号</span>
+					<input type="text" name="Number" id="rightContent2_number_input" value=""/>
+				</div>
+				
+				<!--上传图片-->
+				<div id="Upload" style="position: absolute;top: 80px;left: 700px;">
+					<p>图片上传</p>
+					<img id="imageUpload" style=" position: absolute;top:45px; width: 280px;height: 280px" src="img/addImg.JPG"/>
+					<input type="file" id="imgUpload" onchange="selectImage(this);" style="position: relative;top:-270px; width: 200px;height: 50px;"/>
+					<img id="promptBox" src="img/promptImg.JPG" style=" width: 210px;height: 78px;margin-bottom: 200px;margin-left: 100px;"/>
+				</div>
+				
+				
+				<div id="rightContent2_type">
+					<span id="rightContent2_type_title">种类</span>
+					<input type="text" name="type" id="rightContent2_type_input" value=""/>
+				</div>
+				<div id="rightContent2_SimpleComplex">
+					<span id="rightContent2_SimpleComplex_title">简单-复杂</span>   
+					<input type="text" name="simplecomplex" id="rightContent2_SimpleComplex_input" value=""/>
+					<p></p>
+				</div>
+				<div id="rightContent2_HaleFull">
+					<span id="rightContent2_HaleFull_title">硬朗-圆润</span>
+					<input type="text" name="halefull" id="rightContent2_HaleFull_input" value=""/>
+					<p></p>					
+				</div>
+				<div id="rightContent2_CoolWarm">
+					<span id="rightContent2_CoolWarm_title">冷酷-温暖</span>
+					<input type="text" name="coolwarm" id="rightContent2_CoolWarm_input" value=""/>
+					<p></p>
+				</div>
+				<hr style="width: 90%;background:gray;margin-top: 50px;" />
+				<p id="holdButton_Load" style="display: inline-block; width: 140px;height: 40px;line-height: 40px; background: yellow;text-align: center;margin-left: 60px;margin-top: 45px;">保存</p>
+			</div>
+			
+			<!--
+				编辑素材页面
+			-->
+			<div id="rightContent_3" hidden="hidden"  class="col s8 push-s1">
+				<p id="rightContent3_title">编辑素材</p>
+				<div id="rightContent3_number">
+					<span id="rightContent3_number_title" style="">编号</span>
+					<input type="text" name="Number" id="rightContent3_number_input" value=""/>
+				</div>
+				
+				<!--上传图片-->
+				<div id="Edit" style="position: absolute;top: 80px;left: 700px;">
+					<img id="image_edit" style=" position: absolute;top:45px; width: 280px;height: 280px" src="img/addImg.JPG"/>
+					<input type="file_edit" id="imgEdit" onchange="selectImageEdit(this);" style="position: relative;top:-270px; width: 200px;height: 50px;"/>
+				</div>
+				
+				
+				<div id="rightContent3_type">
+					<span id="rightContent3_type_title">种类</span>
+					<input type="text" name="type" id="rightContent3_type_input" value=""/>
+				</div>
+				<div id="rightContent3_SimpleComplex">
+					<span id="rightContent3_SimpleComplex_title">简单-复杂</span>   
+					<input type="text" name="simplecomplex" id="rightContent3_SimpleComplex_input" value=""/>
+					<p></p>
+				</div>
+				<div id="rightContent3_HaleFull">
+					<span id="rightContent3_HaleFull_title">硬朗-圆润</span>
+					<input type="text" name="halefull" id="rightContent3_HaleFull_input" value=""/>
+					<p></p>					
+				</div>
+				<div id="rightContent3_CoolWarm">
+					<span id="rightContent3_CoolWarm_title">冷酷-温暖</span>
+					<input type="text" name="coolwarm" id="rightContent3_CoolWarm_input" value=""/>
+					<p></p>
+				</div>
+				<hr style="width: 90%;background:gray;margin-top: 50px;" />
+				<p id="holdButton_Edit" style="display: inline-block; width: 140px;height: 40px;line-height: 40px; background: yellow;text-align: center;margin-left: 60px;margin-top: 45px;">保存</p>
+				<p id="removeButton_Edit" style="display: inline-block; width: 140px;height: 40px;line-height: 40px; background: red;text-align: center;margin-left: 60px;margin-top: 45px;">删除素材</p>
+			</div>
+		</div>
+		
+		
+		
+		
+		<script type="text/javascript" src="js/creatTableTbody.js"></script>
+		<script type="text/javascript" src="js/SearchOfCondition.js"></script>
+		<script src="js/newMaterial.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/pageControl.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/editMaterial.js" type="text/javascript" charset="utf-8"></script>
+	</body>				          	
+</html>

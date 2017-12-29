@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>materialize界面2</title>
+		<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+		<script type="text/javascript" src="js/materialize.js"></script>
+		<script type="text/javascript">
+			var row = "";
+			var offset = "";
+			var limit = 6;
+			var pageNum = 1;
+			var dataPage = "";
+			var dataArray = "";
+			var Lock = 1;
+			//table清空
+			function clearTable(){
+				$("table").remove();
+			}
+			//创建table
+			function creatTable(){
+				//在分页控件之前插入table标签
+				$("<table id='content_table' class='centered highlight bordered'></table>").insertBefore("#Pagination");
+				$("#content_table").append("<tr id='content_menu'></tr>");
+				$("#content_menu").append("<th class='center'><a href='#'>产品图</a></th>");
+				$("#content_menu").append("<th class='center'><a href='#'>名称</a></th>");
+				$("#content_menu").append("<th class='center'><a href='#'>尺寸</a></th>");
+				$("#content_menu").append("<th class='center'><a href='#'>颜色</a></th>");
+				$("#content_menu").append("<th class='center'><a href='#'>更多</a></th>");
+			}
+			//清空分页控件
+			function clearPageControl(){
+				$("#pageDiv").remove();
+			}
+			//重建分页控件
+			function creatPageControl(){
+				$("<span id='pageDiv'></span>").insertBefore("#rightPage");
+				for (var j = 1;j <= dataPage;j++ ) {
+					//初始化让分页1为选中状态   pageDiv
+					if (j == pageNum) {
+						$("#pageDiv").append("<li id='#page_' class='active'><a id='pageA' class='pageA' href='#!'>"+j+"</a></li>");
+					}else{
+						$("#pageDiv").append("<li id='#page' class='waves-effect'><a id='pageA' class='pageA' href='#!'>"+j+"</a></li>");
+					}
+				}
+				pageBtn();
+			}
+			//翻一整页
+			function leftAndRightPage(){
+				//左
+				$("#lefePage").click(function(){
+					if (pageNum==1) {
+						//到达了第一页
+						$("#lefePage").attr("class", "disabled");
+						$("#rightPage").attr("class", "waves-effect");
+					} else{
+						$("#lefePage").attr("class", "waves-effect");
+						$("#rightPage").attr("class", "waves-effect");
+						//如果没有到达第一页
+						clearTable();
+						clearPageControl();
+						getDataInit((pageNum-1)*6 - 6,6);
+						pageNum--;
+					}
+				});			
+				//右
+				$("#rightPage").click(function(){
+					if (pageNum == dataPage) {
+						//到达了最后一页
+						$("#lefePage").attr("class", "waves-effect");
+						$("#rightPage").attr("class", "disabled");
+					} else{
+						$("#lefePage").attr("class", "waves-effect");
+						$("#rightPage").attr("class", "waves-effect");
+						clearTable();
+						clearPageControl();
+						getDataInit((pageNum-1)*6 + 6,6);
+						pageNum++;
+					}
+				});
+				
+			}
+			//分页控件左右按钮事件处理
+//			function leftAndRightPage(){
+//				//左
+//				$("#lefePage").click(function(){
+//					if (pageNum==1) {
+//						//到达了第一页
+//						$("#lefePage").attr("class", "disabled");
+//						$("#rightPage").attr("class", "waves-effect");
+//					} else{
+//						$("#lefePage").attr("class", "waves-effect");
+//						$("#rightPage").attr("class", "waves-effect");
+//						//如果没有到达第一页
+//						clearTable();
+//						clearPageControl();
+//						getDataInit((pageNum-1)*6 - 6,6);
+//						pageNum--;
+//					}
+//				});			
+//				//右
+//				$("#rightPage").click(function(){
+//					if (pageNum == dataPage) {
+//						//到达了最后一页
+//						$("#lefePage").attr("class", "waves-effect");
+//						$("#rightPage").attr("class", "disabled");
+//					} else{
+//						$("#lefePage").attr("class", "waves-effect");
+//						$("#rightPage").attr("class", "waves-effect");
+//						clearTable();
+//						clearPageControl();
+//						getDataInit((pageNum-1)*6 + 6,6);
+//						pageNum++;
+//					}
+//				});
+//				
+//			}
+			
+			//检测按钮，切换至相对应界面
+			function pageBtn(){
+				$(".pageA").bind("click", function(){
+					var txt = parseInt($(this).html());
+  					console.log(txt);
+  					clearTable();
+					clearPageControl();
+  					getDataInit((txt-2)*6 + 6,6);
+  					if (pageNum == dataPage -1) {
+						//到达了最后一页
+						$("#lefePage").attr("class", "waves-effect");
+						$("#rightPage").attr("class", "disabled");
+					}else{
+  						if (pageNum == 2) {
+						//到达了第一页
+						$("#lefePage").attr("class", "disabled");
+						$("#rightPage").attr("class", "waves-effect");
+					} else{
+  							$("#lefePage").attr("class", "waves-effect");
+							$("#rightPage").attr("class", "waves-effect");
+  						}
+  					}
+					pageNum = txt;
+  					$("#page").parent().attr("class", "active");
+				});
+			}
+			
+			
+			//初始化数据请求
+			function getDataInit(offset, limit) {
+				//ajax请求数据
+				$.ajax({
+					type: "get",
+					url: "http://127.0.0.1:8081/",
+					data: "offset=" + offset + "&limit=" + limit,
+					async: true,
+					dataType: "json",
+					success: function(data) {
+						dataArray = null;
+						dataArray = data.jsonData;
+						dataPage = data.totalPage;
+						if (dataArray.length % 6 == 0) {
+							row = 6;
+						} else{
+							row = dataArray.length;
+						}
+						creatTable();		
+						creatPageControl();
+						for(var i = 0; i < row; i++) {
+							$("#content_table").append("<tr id='content_tr_"+i+"'></tr>");
+							$("#content_tr_"+ i).append("<td id='contentTd_pro_"+ i +"0'><a id='content_pro_"+i+"0' href='#'><img id='content_img_"+i+"'/></a></td>");
+								$("#content_img_" + i).attr({"width": "144px","height": "88px","src" : dataArray[i].img});
+							$("#content_tr_"+ i).append("<td id='contentTd_name_"+ i +"0'><a id='content_name_"+i+"0' href='#'>"+dataArray[i].name+"</a></td>");
+							$("#content_tr_"+ i).append("<td id='contentTd_size_"+ i +"0'><a id='content_size_"+i+"0' href='#'>"+dataArray[i].size+"</a></td>");
+							$("#content_tr_"+ i).append("<td id='contentTd_color_"+ i +"0'><a id='content_color_"+i+"0' href='#'>"+dataArray[i].color+"</a></td>");
+							$("#content_tr_"+ i).append("<td id='contentTd_pro_"+ i +"4'><pre><a href='#'>预览</a> <a href='#'>打印</a> <a href='#'>删除</a></pre> </td>");	
+						
+						}						
+					}
+				});
+			}
+
+			$(document).ready(function() {
+				getDataInit(0, 6);	
+				leftAndRightPage();
+			
+			});
+		</script>
+		
+		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+		<link rel="stylesheet" type="text/css" href="css/materialize.css" />
+		<style type="text/css">
+			html,body{
+				height: 100%;
+			}
+		</style>
+	</head>
+
+	<body class="grey lighten-4">
+		<div class="row">
+			<nav class="col s12">
+				<div class="nav-wrapper">
+					<a href="#" class="brand-logo">Logo</a>
+					<ul id="nav-mobile" class="right hide-on-med-and-down">
+						<li>
+							<a href="#">Sass</a>
+						</li>
+						<li>
+							<a href="#">组件</a>
+						</li>
+						<li>
+							<a href="#">JavaScript</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+			<div class="col s2 light-blue lighten-5" style="height: 800px">
+				<a class='dropdown-button btn' data-beloworigin=true href='materialize界面3.html' data-activates='dropdown1' style="width: 150px;">分类</a>
+				<ul id='dropdown1' class='dropdown-content'>
+					<li>
+						<a href="#">电视剧|综艺</a>
+					</li>
+					<li>
+						<a href="#">游戏|小游戏</a>
+					</li>
+					<li>
+						<a href="#">电影|直播</a>
+					</li>
+					<li>
+						<a href="#">动画|漫画</a>
+					</li>
+					<li>
+						<a href="#">新闻|军事</a>
+					</li>
+					<li>
+						<a href="#">旅游|音乐</a>
+					</li>
+				</ul>
+			</div>
+			<div id="content" class="col s10 bordered light-blue lighten-5" style="height: 800px;">
+				<table id="content_table" class="centered highlight bordered"></table><br />
+				
+					
+				<!--分页控件-->
+				<div id="Pagination" class="row valign-wrapper">
+					<ul class="pagination" style="margin: 0 auto;">
+						<li id="lefePage" class="disabled">
+							<a href="#!"><i class="material-icons">chevron_left</i></a>
+						</li>
+						<span id="pageDiv">
+							<!--<li class="waves-effect"><a href="#!">5</a></li>-->
+						</span>
+						
+						<li id="rightPage" class="waves-effect">
+							<a href="#!"><i class="material-icons">chevron_right</i></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+	</body>
+
+</html>
